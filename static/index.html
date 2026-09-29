@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>本地声音克隆</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar"><div><span class="brand-mark">◉</span><span class="brand">声刻</span><span class="tag">本地声音工作室</span></div><span id="status" class="status">检查模型中…</span></header>
+    <section class="hero"><div class="eyebrow">YOUR VOICE, YOUR WORDS</div><h1>让熟悉的声音，<br><em>说出新的故事。</em></h1><p>保存人物的声音样本，输入中文文案，在这台 Mac 上生成可下载的 MP3。</p></section>
+    <section class="reading-card" aria-labelledby="reading-title">
+      <div class="reading-top"><div><span class="reading-kicker">录音准备</span><h2 id="reading-title">给朗读者的标准文案</h2><p>正常说话即可，读完停一秒。建议在安静房间录制，手机距嘴约一掌，不要配乐或刻意模仿播音腔。</p></div><span class="reading-time">约 10 秒</span></div>
+      <blockquote id="reading-script">大家好，我现在试一下录音。今天出门有点赶，差点忘了拿钥匙。你能听清我说话吗？</blockquote>
+      <div class="reading-actions"><a class="record-jump" href="#voice-form">现在直接录音 ↓</a><button id="change-reading" type="button">换一段 ↻</button><button id="copy-reading" type="button">复制给朗读者</button><button id="fill-transcript" type="button">填入录音原文</button><span id="reading-message" role="status"></span></div>
+      <p class="reading-note">只朗读上面的正文，不念录制说明。声刻只取文件开头最多 15 秒的声音；如果说了不同的词，请按实际录音修改“录音原文”。</p>
+    </section>
+    <div class="layout">
+      <section class="card compose"><div class="section-head"><div class="step">01</div><div><h2>生成配音</h2><p>选择已保存的音色，然后写下要说的话</p></div></div>
+        <label for="voice-select">选择音色</label><div class="select-row"><select id="voice-select"><option value="">请先添加音色</option></select><button id="refresh" class="icon-btn" title="刷新音色">↻</button></div>
+        <label for="engine-select">声音模型</label><select id="engine-select"><option value="qwen">千问 3 TTS</option><option value="omnivoice">OmniVoice</option></select><p class="engine-hint">可以随时切换，同一音色可对比两种模型。OmniVoice 首次使用或切换回来时，可能要等约 1～2 分钟。</p>
+        <label for="script">中文文案 <span id="count">0 / 500</span></label><textarea id="script" maxlength="500" placeholder="在这里输入想让人物说出的文字。建议先用一两句试听，确认音色效果后再生成长文案。"></textarea>
+        <button id="generate" class="primary">生成 MP3 <span>→</span></button><p id="generate-message" class="message" role="status"></p>
+        <div id="result" class="result hidden"><div class="result-head"><span>生成记录 · 可逐条对比</span><span id="output-total"></span></div><div id="output-list" class="output-list"></div><button id="output-toggle" class="output-toggle hidden" type="button" aria-controls="output-list" aria-expanded="false"></button></div>
+      </section>
+      <section class="card library"><div class="section-head"><div class="step">02</div><div><h2>音色库</h2><p>录一次，之后可反复选用</p></div></div>
+        <form id="voice-form"><label for="name">音色名称</label><input id="name" name="name" maxlength="40" placeholder="例如：测试音色 A / 录音者 B" required>
+        <div class="recorder"><strong>直接录一段</strong><p>照着下面的文字，用平常语气朗读。按住录音，松开结束；最长 15 秒。</p><blockquote id="recording-script">大家好，我现在试一下录音。今天出门有点赶，差点忘了拿钥匙。你能听清我说话吗？</blockquote><button id="record-hold" class="record-hold" type="button" aria-label="按住录音，松开结束">● 按住说话</button><button id="record-toggle" class="record-toggle" type="button">或点按开始录音</button><p id="record-message" class="record-message" role="status">录完可试听，再点“保存这个音色”。</p><audio id="record-preview" class="hidden" controls></audio></div>
+        <label for="audio">或者上传已有录音、视频</label><label class="dropzone" for="audio"><span class="upload-icon">↥</span><strong id="file-label">点击选择 MP4、MOV、WAV、MP3 或 M4A</strong><small>视频会自动提取前 15 秒声音；请使用单人清晰说话的片段</small></label><input id="audio" name="audio" type="file" accept="audio/*,video/mp4,video/quicktime,.m4a,.mp3,.wav,.mp4,.mov" hidden>
+        <label for="transcript">前 15 秒里实际说出的文字</label><textarea id="transcript" name="transcript" maxlength="500" placeholder="请逐字填写视频前 15 秒的说话内容，不能只写视频标题。" required></textarea>
+        <button class="secondary" type="submit">保存这个音色 <span>＋</span></button><p id="voice-message" class="message" role="status"></p></form>
+        <div class="divider"></div><div class="list-heading">已保存音色 <span id="voice-total">0</span></div><div id="voice-list" class="voice-list"><p class="empty">还没有音色。先添加一段参考录音。</p></div>
+      </section>
+    </div>
+    <footer>所有音色与生成文件保存在本机。首次使用需要下载模型；建议只使用已获授权的录音。</footer>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
